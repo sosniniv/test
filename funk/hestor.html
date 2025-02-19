@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История событий</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .warning-icon { color: orange; }
+        .error-icon { color: red; }
+        .btn-custom {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-custom:hover { background-color: #e9ecef; }
+        .processed { color: #0d6efd; }
+        .processed:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="container">
+        <h5 class="mb-3">
+            <a onclick="history.back()" class="text-decoration-none">Журнал событий</a> / История
+        </h5>
+
+        <!-- Фильтры -->
+        <div class="d-flex align-items-center mb-3">
+            <i class="fa-solid fa-triangle-exclamation error-icon me-2"></i>
+            <i class="fa-solid fa-triangle-exclamation warning-icon me-3"></i>
+
+            <select class="form-select w-auto me-2">
+                <option>Площадка A</option>
+                <option>Площадка B</option>
+            </select>
+
+            <select class="form-select w-auto">
+                <option>A-1, A-2</option>
+                <option>A-3, A-4</option>
+            </select>
+        </div>
+
+        <!-- Таблица истории -->
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Дата</th>
+                    <th>Время</th>
+                    <th>Корпус</th>
+                    <th>Параметр</th>
+                    <th>Описание</th>
+                    <th>Тип</th>
+                    <th>На график</th>
+                    <th>На карточку</th>
+                    <th>Обработано</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>07.02.2025</td>
+                    <td>13:20</td>
+                    <td>А-4</td>
+                    <td>Температура</td>
+                    <td>зона 1 высокая</td>
+                    <td><i class="fa-solid fa-triangle-exclamation error-icon"></i></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-chart-line"></i></button></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-list"></i></button></td>
+                    <td>16:23 07.02.2025 Панина Е.В.</td>
+                </tr>
+                <tr>
+                    <td>07.02.2025</td>
+                    <td>13:11</td>
+                    <td>А-4</td>
+                    <td>Температура</td>
+                    <td>зона 1 высокая</td>
+                    <td><i class="fa-solid fa-triangle-exclamation warning-icon"></i></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-chart-line"></i></button></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-list"></i></button></td>
+                    <td>Не обработано</td>
+                </tr>
+                <tr>
+                    <td>07.02.2025</td>
+                    <td>13:05</td>
+                    <td>Б-16</td>
+                    <td>Влажность</td>
+                    <td>высокая</td>
+                    <td><i class="fa-solid fa-triangle-exclamation warning-icon"></i></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-chart-line"></i></button></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-list"></i></button></td>
+                    <td>16:23 07.02.2025 Панина Е.В.</td>
+                </tr>
+                <tr>
+                    <td>07.02.2025</td>
+                    <td>12:48</td>
+                    <td>В-11</td>
+                    <td>Давление</td>
+                    <td>низкое</td>
+                    <td><i class="fa-solid fa-triangle-exclamation error-icon"></i></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-chart-line"></i></button></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-list"></i></button></td>
+                    <td>Не обработано</td>
+                </tr>
+                <tr>
+                    <td>06.02.2025</td>
+                    <td>12:23</td>
+                    <td>А-25</td>
+                    <td>CO₂</td>
+                    <td>высокая</td>
+                    <td><i class="fa-solid fa-triangle-exclamation warning-icon"></i></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-chart-line"></i></button></td>
+                    <td><button class="btn-custom"><i class="fa-solid fa-list"></i></button></td>
+                    <td>16:23 07.02.2025 Панина Е.В.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
