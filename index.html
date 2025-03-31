@@ -173,7 +173,6 @@
         .unit-btn, .percent-btn {
             min-width: 40px;
             padding: 0.25rem 0.5rem;
-            border-left: none;
         }
 
         .form-control-sm {
@@ -218,6 +217,21 @@
             </div>
             
             <div class="control-panel" style="position: relative;">
+                <div id="sensor-buttons-group" class="btn-group btn-group-sm mb-3" role="group" style="width: 100%; flex-wrap: wrap; display: none;">
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn active">Температура</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">Влажность</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">CO₂</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">NH3</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">Давление</button>
+                </div>
+                <div id="equipment-buttons-group" class="btn-group btn-group-sm mb-3" role="group" style="width: 100%; flex-wrap: wrap; display: none;">
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn active">Вентиляция</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">Приток</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">Обогрев</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">Охлаждение</button>
+                    <button type="button" class="btn btn-outline-secondary equipment-system-btn">Увлажнение</button>
+                </div>
+
                 <div class="d-flex justify-content-end mb-3">
                     <button class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-download"></i> Скачать
@@ -234,39 +248,53 @@
                 <!-- Контейнер для правил температуры -->
                 <div id="temperature-rules" class="rule-container">
                     <table class="rule-table">
+
                         <tr>
                             <td class="rule-number">1.</td>
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheck">
-                                        <label class="form-check-label" for="greaterCheck">больше на</label>
+                                        <input type="radio" id="compare_gt_tem" name="compare_type_tem" value="greater_tem" checked />
+                                        <label for="compare_gt_tem">Больше на</label>
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <input type="text" 
-                                                   class="form-control number-input" 
-                                                   pattern="\d{1,2},\d{2}"
-                                                   title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">кг</button>
+                                                class="form-control number-input" 
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
+                                            <button class="btn btn-outline-secondary unit-btn" type="button">°C</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSetting">
-                                        <label class="form-check-label" for="currentSetting">текущей уставки</label>
+                                        <input type="radio" id="value_current_tem" name="value_type_tem" value="current_tem" checked />
+                                        <label for="value_current_tem">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheck">
-                                        <label class="form-check-label" for="delayCheck">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_tem" name="delay_type_tem" value="enabled_tem" checked />
+                                        <label for="delay_enabled_tem">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheck">
-                                        <label class="form-check-label" for="repeatCheck">уведомление</label>
+                                        <input type="radio" id="notify_normal_tem" name="notification_type_tem" value="notification_tem" checked />
+                                        <label for="notify_normal_t">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheck">
-                                        <label class="form-check-label" for="repeatCheck">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_tem" name="repeat_type_tem" value="enabled_tem" checked />
+                                        <label for="repeat_enabled_tem">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -276,31 +304,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheck">
-                                        <label class="form-check-label" for="lessCheck" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                   class="form-control number-input" 
-                                                   pattern="\d{1,2},\d{2}"
-                                                   title="Введите число в формате XX,XX">
+                                        <input type="radio" id="compare_lt_tem" name="compare_type_tem" value="less_tem" />
+                                        <label for="compare_lt_tem" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 40px;">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheck">
-                                        <label class="form-check-label" for="fixedCheck" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_tem" name="value_type_tem" value="fixed_tem" />
+                                        <label for="value_fixed_tem">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_tem" name="delay_type_tem" value="none_tem" />
+                                        <label for="delay_none_tem">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_tem" name="notification_type_tem" value="alert_tem" />
+                                        <label for="notify_alert_tem">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1">
-                                        <label class="form-check-label" for="noneCheck1" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheck">
-                                        <label class="form-check-label" for="alarmCheck" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2">
-                                        <label class="form-check-label" for="noneCheck2">нет</label>
+                                        <input type="radio" id="repeat_none_tem" name="repeat_type_tem" value="none_tem" />
+                                        <label for="repeat_none_tem">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -315,34 +339,47 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheckHumidity">
-                                        <label class="form-check-label" for="greaterCheckHumidity">больше на</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
+                                        <input type="radio" id="compare_gt_vl" name="compare_type_vl" value="greater_vl" checked />
+                                        <label for="compare_gt_vl">Больше на</label>
+                                        <div class="input-group input-group-sm" style="width: 135px;">
                                             <input type="text" 
                                                 class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">% абс</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSettingHumidity">
-                                        <label class="form-check-label" for="currentSettingHumidity">текущей уставки</label>
+                                        <input type="radio" id="value_current_vl" name="value_type_vl" value="current_vl" checked />
+                                        <label for="value_current_vl">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckHumidity">
-                                        <label class="form-check-label" for="delayCheckHumidity">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_vl" name="delay_type_vl" value="enabled_vl" checked />
+                                        <label for="delay_enabled_vl">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckHumidity">
-                                        <label class="form-check-label" for="repeatCheckHumidity">уведомление</label>
+                                        <input type="radio" id="notify_normal_vl" name="notification_type_vl" value="notification_vl" checked />
+                                        <label for="notify_normal_vl">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckHumidity2">
-                                        <label class="form-check-label" for="repeatCheckHumidity2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_vl" name="repeat_type_vl" value="enabled_vl" checked />
+                                        <label for="repeat_enabled_vl">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -352,31 +389,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheckHumidity">
-                                        <label class="form-check-label" for="lessCheckHumidity" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">% отн</button>
+                                        <input type="radio" id="compare_lt_vl" name="compare_type_vl" value="less_vl" />
+                                        <label for="compare_lt_vl" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 55px;">
+                                            <button class="btn btn-outline-secondary unit-btn" type="button" style="white-space: nowrap;">% отн</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheckHumidity">
-                                        <label class="form-check-label" for="fixedCheckHumidity" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_vl" name="value_type_vl" value="fixed_vl" />
+                                        <label for="value_fixed_vl">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_vl" name="delay_type_vl" value="none_vl" />
+                                        <label for="delay_none_vl">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_vl" name="notification_type_vl" value="alert_vl" />
+                                        <label for="notify_alert_vl">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1Humidity">
-                                        <label class="form-check-label" for="noneCheck1Humidity" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckHumidity">
-                                        <label class="form-check-label" for="alarmCheckHumidity" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Humidity">
-                                        <label class="form-check-label" for="noneCheck2Humidity">нет</label>
+                                        <input type="radio" id="repeat_none_vl" name="repeat_type_vl" value="none_vl" />
+                                        <label for="repeat_none_vl">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -391,34 +424,47 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheckCO2">
-                                        <label class="form-check-label" for="greaterCheckCO2">больше на</label>
+                                        <input type="radio" id="compare_gt_ug" name="compare_ugype_ug" value="greater_ug" checked />
+                                        <label for="compare_gt_ug">Больше на</label>
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <input type="text" 
                                                 class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">ppm</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSettingCO2">
-                                        <label class="form-check-label" for="currentSettingCO2">текущей уставки</label>
+                                        <input type="radio" id="value_current_ug" name="value_ugype_ug" value="current_ug" checked />
+                                        <label for="value_current_ug">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckCO2">
-                                        <label class="form-check-label" for="delayCheckCO2">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_ug" name="delay_ugype_ug" value="enabled_ug" checked />
+                                        <label for="delay_enabled_ug">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckCO2">
-                                        <label class="form-check-label" for="repeatCheckCO2">уведомление</label>
+                                        <input type="radio" id="notify_normal_ug" name="notification_ugype_ug" value="notification_ug" checked />
+                                        <label for="notify_normal_ug">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckCO2_2">
-                                        <label class="form-check-label" for="repeatCheckCO2_2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_ug" name="repeat_ugype_ug" value="enabled_ug" checked />
+                                        <label for="repeat_enabled_ug">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -428,31 +474,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheckCO2">
-                                        <label class="form-check-label" for="lessCheckCO2" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                        <input type="radio" id="compare_lt_ug" name="compare_ugype_ug" value="less_ug" />
+                                        <label for="compare_lt_ug" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 40px;">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheckCO2">
-                                        <label class="form-check-label" for="fixedCheckCO2" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_ug" name="value_ugype_ug" value="fixed_ug" />
+                                        <label for="value_fixed_ug">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_ug" name="delay_ugype_ug" value="none_ug" />
+                                        <label for="delay_none_ug">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_ug" name="notification_ugype_ug" value="alert_ug" />
+                                        <label for="notify_alert_ug">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1CO2">
-                                        <label class="form-check-label" for="noneCheck1CO2" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckCO2">
-                                        <label class="form-check-label" for="alarmCheckCO2" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2CO2">
-                                        <label class="form-check-label" for="noneCheck2CO2">нет</label>
+                                        <input type="radio" id="repeat_none_ug" name="repeat_ugype_ug" value="none_ug" />
+                                        <label for="repeat_none_ug">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -467,34 +509,47 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheckAmmonia">
-                                        <label class="form-check-label" for="greaterCheckAmmonia">больше на</label>
+                                        <input type="radio" id="compare_gt_amm" name="compare_ammype_amm" value="greater_amm" checked />
+                                        <label for="compare_gt_amm">Больше на</label>
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <input type="text" 
                                                 class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">ppm</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSettingAmmonia">
-                                        <label class="form-check-label" for="currentSettingAmmonia">текущей уставки</label>
+                                        <input type="radio" id="value_current_amm" name="value_ammype_amm" value="current_amm" checked />
+                                        <label for="value_current_amm">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckAmmonia">
-                                        <label class="form-check-label" for="delayCheckAmmonia">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_amm" name="delay_ammype_amm" value="enabled_amm" checked />
+                                        <label for="delay_enabled_amm">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckAmmonia">
-                                        <label class="form-check-label" for="repeatCheckAmmonia">уведомление</label>
+                                        <input type="radio" id="notify_normal_amm" name="notification_ammype_amm" value="notification_amm" checked />
+                                        <label for="notify_normal_amm">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckAmmonia2">
-                                        <label class="form-check-label" for="repeatCheckAmmonia2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_amm" name="repeat_ammype_amm" value="enabled_amm" checked />
+                                        <label for="repeat_enabled_amm">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -504,31 +559,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheckAmmonia">
-                                        <label class="form-check-label" for="lessCheckAmmonia" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                        <input type="radio" id="compare_lt_amm" name="compare_ammype_amm" value="less_amm" />
+                                        <label for="compare_lt_amm" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 40px;">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheckAmmonia">
-                                        <label class="form-check-label" for="fixedCheckAmmonia" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_amm" name="value_ammype_amm" value="fixed_amm" />
+                                        <label for="value_fixed_amm">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_amm" name="delay_ammype_amm" value="none_amm" />
+                                        <label for="delay_none_amm">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_amm" name="notification_ammype_amm" value="alert_amm" />
+                                        <label for="notify_alert_amm">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1Ammonia">
-                                        <label class="form-check-label" for="noneCheck1Ammonia" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckAmmonia">
-                                        <label class="form-check-label" for="alarmCheckAmmonia" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Ammonia">
-                                        <label class="form-check-label" for="noneCheck2Ammonia">нет</label>
+                                        <input type="radio" id="repeat_none_amm" name="repeat_ammype_amm" value="none_amm" />
+                                        <label for="repeat_none_amm">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -543,34 +594,47 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheckPressure">
-                                        <label class="form-check-label" for="greaterCheckPressure">больше на</label>
+                                        <input type="radio" id="compare_gt_dav" name="compare_davype_dav" value="greater_dav" checked />
+                                        <label for="compare_gt_dav">Больше на</label>
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <input type="text" 
                                                 class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">Па</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSettingPressure">
-                                        <label class="form-check-label" for="currentSettingPressure">текущей уставки</label>
+                                        <input type="radio" id="value_current_dav" name="value_davype_dav" value="current_dav" checked />
+                                        <label for="value_current_dav">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckPressure">
-                                        <label class="form-check-label" for="delayCheckPressure">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_dav" name="delay_davype_dav" value="enabled_dav" checked />
+                                        <label for="delay_enabled_dav">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckPressure">
-                                        <label class="form-check-label" for="repeatCheckPressure">уведомление</label>
+                                        <input type="radio" id="notify_normal_dav" name="notification_davype_dav" value="notification_dav" checked />
+                                        <label for="notify_normal_dav">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckPressure2">
-                                        <label class="form-check-label" for="repeatCheckPressure2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_dav" name="repeat_davype_dav" value="enabled_dav" checked />
+                                        <label for="repeat_enabled_dav">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -580,31 +644,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheckPressure">
-                                        <label class="form-check-label" for="lessCheckPressure" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                        <input type="radio" id="compare_lt_dav" name="compare_davype_dav" value="less_dav" />
+                                        <label for="compare_lt_dav" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 40px;">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheckPressure">
-                                        <label class="form-check-label" for="fixedCheckPressure" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_dav" name="value_davype_dav" value="fixed_dav" />
+                                        <label for="value_fixed_dav">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_dav" name="delay_davype_dav" value="none_dav" />
+                                        <label for="delay_none_dav">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_dav" name="notification_davype_dav" value="alert_dav" />
+                                        <label for="notify_alert_dav">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1Pressure">
-                                        <label class="form-check-label" for="noneCheck1Pressure" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckPressure">
-                                        <label class="form-check-label" for="alarmCheckPressure" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Pressure">
-                                        <label class="form-check-label" for="noneCheck2Pressure">нет</label>
+                                        <input type="radio" id="repeat_none_dav" name="repeat_davype_dav" value="none_dav" />
+                                        <label for="repeat_none_dav">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -622,19 +682,31 @@
                                         <label class="form-check-label" for="powerCheck">Нет питания</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckPower">
-                                        <label class="form-check-label" for="delayCheckPower">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_220B" name="delay_220Bype_220B" value="enabled_220B" checked />
+                                        <label for="delay_enabled_220B">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckPower">
-                                        <label class="form-check-label" for="repeatCheckPower">уведомление</label>
+                                        <input type="radio" id="notify_normal_220B" name="notification_220Bype_220B" value="notification_220B" checked />
+                                        <label for="notify_normal_220B">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckPower2">
-                                        <label class="form-check-label" for="repeatCheckPower2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_220B" name="repeat_220Bype_220B" value="enabled_220B" checked />
+                                        <label for="repeat_enabled_220B">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -644,19 +716,19 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <label class="form-check-label" style="margin-right: 78px"></label>
+                                        <label class="form-check-label" style="margin-right: 82px"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 172px;">
+                                        <input type="radio" id="delay_none_220B" name="delay_220Bype_220B" value="none_220B" />
+                                        <label for="delay_none_220B">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_220B" name="notification_220Bype_220B" value="alert_220B" />
+                                        <label for="notify_alert_220B">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1Power">
-                                        <label class="form-check-label" for="noneCheck1Power" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckPower">
-                                        <label class="form-check-label" for="alarmCheckPower" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Power">
-                                        <label class="form-check-label" for="noneCheck2Power">нет</label>
+                                        <input type="radio" id="repeat_none_220B" name="repeat_220Bype_220B" value="none_220B" />
+                                        <label for="repeat_none_220B">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -671,34 +743,47 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheckWater">
-                                        <label class="form-check-label" for="greaterCheckWater">больше на</label>
+                                        <input type="radio" id="compare_gt_voda" name="compare_vodaype_voda" value="greater_voda" checked />
+                                        <label for="compare_gt_voda">Больше на</label>
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <input type="text" 
                                                 class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">л/сут</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSettingWater">
-                                        <label class="form-check-label" for="currentSettingWater">текущей уставки</label>
+                                        <input type="radio" id="value_current_voda" name="value_vodaype_voda" value="current_voda" checked />
+                                        <label for="value_current_voda">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckWater">
-                                        <label class="form-check-label" for="delayCheckWater">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_voda" name="delay_vodaype_voda" value="enabled_voda" checked />
+                                        <label for="delay_enabled_voda">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckWater">
-                                        <label class="form-check-label" for="repeatCheckWater">уведомление</label>
+                                        <input type="radio" id="notify_normal_voda" name="notification_vodaype_voda" value="notification_voda" checked />
+                                        <label for="notify_normal_voda">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckWater2">
-                                        <label class="form-check-label" for="repeatCheckWater2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_voda" name="repeat_vodaype_voda" value="enabled_voda" checked />
+                                        <label for="repeat_enabled_voda">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -708,31 +793,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheckWater">
-                                        <label class="form-check-label" for="lessCheckWater" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                        <input type="radio" id="compare_lt_voda" name="compare_vodaype_voda" value="less_voda" />
+                                        <label for="compare_lt_voda" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 40px;">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheckWater">
-                                        <label class="form-check-label" for="fixedCheckWater" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_voda" name="value_vodaype_voda" value="fixed_voda" />
+                                        <label for="value_fixed_voda">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_voda" name="delay_vodaype_voda" value="none_voda" />
+                                        <label for="delay_none_voda">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_voda" name="notification_vodaype_voda" value="alert_voda" />
+                                        <label for="notify_alert_voda">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1Water">
-                                        <label class="form-check-label" for="noneCheck1Water" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckWater">
-                                        <label class="form-check-label" for="alarmCheckWater" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Water">
-                                        <label class="form-check-label" for="noneCheck2Water">нет</label>
+                                        <input type="radio" id="repeat_none_voda" name="repeat_vodaype_voda" value="none_voda" />
+                                        <label for="repeat_none_voda">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -747,34 +828,47 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="greaterCheckFeed">
-                                        <label class="form-check-label" for="greaterCheckFeed">больше на</label>
+                                        <input type="radio" id="compare_gt_corm" name="compare_cormype_corm" value="greater_corm" checked />
+                                        <label for="compare_gt_corm">Больше на</label>
                                         <div class="input-group input-group-sm" style="width: 120px;">
                                             <input type="text" 
                                                 class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">кг</button>
+                                                pattern="^\d{1,2}([.,]\d{1,2})?$"
+                                                title="Введите число в формате XX,XX или XX.XX"
+                                                oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/([.,].*)[.,]/g, '$1');">
+                                            <button class="btn btn-outline-secondary unit-btn" type="button">КГ</button>
                                         </div>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="currentSettingFeed">
-                                        <label class="form-check-label" for="currentSettingFeed">текущей уставки</label>
+                                        <input type="radio" id="value_current_corm" name="value_cormype_corm" value="current_corm" checked />
+                                        <label for="value_current_corm">Текущей уставки</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="delayCheckFeed">
-                                        <label class="form-check-label" for="delayCheckFeed">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_corm" name="delay_cormype_corm" value="enabled_corm" checked />
+                                        <label for="delay_enabled_corm">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckFeed">
-                                        <label class="form-check-label" for="repeatCheckFeed">уведомление</label>
+                                        <input type="radio" id="notify_normal_corm" name="notification_cormype_corm" value="notification_corm" checked />
+                                        <label for="notify_normal_corm">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckFeed2">
-                                        <label class="form-check-label" for="repeatCheckFeed2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_corm" name="repeat_cormype_corm" value="enabled_corm" checked />
+                                        <label for="repeat_enabled_corm">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -784,31 +878,27 @@
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="lessCheckFeed">
-                                        <label class="form-check-label" for="lessCheckFeed" style="margin-right: 15px;">меньше</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
+                                        <input type="radio" id="compare_lt_corm" name="compare_cormype_corm" value="less_corm" />
+                                        <label for="compare_lt_corm" style="margin-right: 75px;">Меньше на</label>
+                                        <div class="input-group input-group-sm" style="width: 40px;">
                                             <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
                                         </div>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="fixedCheckFeed">
-                                        <label class="form-check-label" for="fixedCheckFeed" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 9px;">
+                                        <input type="radio" id="value_fixed_corm" name="value_cormype_corm" value="fixed_corm" />
+                                        <label for="value_fixed_corm">Фиксированное</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 171px;">
+                                        <input type="radio" id="delay_none_corm" name="delay_cormype_corm" value="none_corm" />
+                                        <label for="delay_none_corm">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_corm" name="notification_cormype_corm" value="alert_corm" />
+                                        <label for="notify_alert_corm">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck1Feed">
-                                        <label class="form-check-label" for="noneCheck1Feed" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckFeed">
-                                        <label class="form-check-label" for="alarmCheckFeed" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Feed">
-                                        <label class="form-check-label" for="noneCheck2Feed">нет</label>
+                                        <input type="radio" id="repeat_none_corm" name="repeat_cormype_corm" value="none_corm" />
+                                        <label for="repeat_none_corm">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -826,17 +916,29 @@
                                         <label class="form-check-label" for="connectionCheck">Нет данных</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckConnection">
-                                        <label class="form-check-label" for="repeatCheckConnection">уведомление</label>
+                                        <input type="radio" id="notify_normal_svyz" name="notification_svyzype_svyz" value="notification_svyz" checked />
+                                        <label for="notify_normal_svyz">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="repeatCheckConnection2">
-                                        <label class="form-check-label" for="repeatCheckConnection2">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_svyz" name="repeat_svyzype_svyz" value="enabled_svyz" checked />
+                                        <label for="repeat_enabled_svyz">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -848,13 +950,13 @@
                                     <div class="form-check form-check-inline rule-item">
                                         <label class="form-check-label" style="margin-right: 230px"></label>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="alarmCheckConnection">
-                                        <label class="form-check-label" for="alarmCheckConnection" style="margin-right: 40px;">авария</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-right: 42px;">
+                                        <input type="radio" id="notify_alert_svyz" name="notification_svyzype_svyz" value="alert_svyz" />
+                                        <label for="notify_alert_svyz">Авария</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="noneCheck2Connection">
-                                        <label class="form-check-label" for="noneCheck2Connection">нет</label>
+                                        <input type="radio" id="repeat_none_svyz" name="repeat_svyzype_svyz" value="none_svyz" />
+                                        <label for="repeat_none_svyz">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -863,43 +965,40 @@
                 </div>
                 <!-- Контейнер для правил телеметрии -->
                 <div id="telemetry-rules" class="rule-container">
-                    <div class="btn-group btn-group-sm mb-2" role="group">
-                        <button type="button" class="btn btn-outline-secondary">Температура</button>
-                        <button type="button" class="btn btn-outline-secondary">Влажность</button>
-                        <button type="button" class="btn btn-outline-secondary">СО₂</button>
-                        <button type="button" class="btn btn-outline-secondary">NH₃</button>
-                        <button type="button" class="btn btn-outline-secondary">Давление</button>
-                    </div>
                     <table class="rule-table">
                         <tr>
                             <td class="rule-number">1.</td>
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="sensorFailureCheck">
-                                        <label class="form-check-label" for="sensorFailureCheck">отказ датчиков</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">шт</button>
-                                        </div>
+                                        <label class="form-check-label" for="sensorFailureCheck">Отказ датчиков</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryDelayCheck">
-                                        <label class="form-check-label" for="telemetryDelayCheck">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_telemetr" name="delay_telemetrype_telemetr" value="enabled_telemetr" checked />
+                                        <label for="delay_enabled_telemetr">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryNotificationCheck">
-                                        <label class="form-check-label" for="telemetryNotificationCheck">уведомление</label>
+                                        <input type="radio" id="notify_normal_telemetr" name="notification_telemetrype_telemetr" value="notification_telemetr" checked />
+                                        <label for="notify_normal_telemetr">Информация</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryRepeatCheck">
-                                        <label class="form-check-label" for="telemetryRepeatCheck">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_telemetr" name="repeat_telemetrype_telemetr" value="enabled_telemetr" checked />
+                                        <label for="repeat_enabled_telemetr">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -908,32 +1007,28 @@
                             <td></td>
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="invalidReadingsCheck">
-                                        <label class="form-check-label" for="invalidReadingsCheck" style="margin-right: 15px;">некорректные показатели</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
-                                        </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-left: 130px;">
+                                        <input type="radio" id="delay_none_telemetr" name="delay_telemetrype_telemetr" value="none_telemetr" />
+                                        <label for="delay_none_telemetr">Нет</label>
+                                    </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-left: 173px;">
+                                        <input type="radio" id="notify_alert_telemetr" name="notification_telemetrype_telemetr" value="alert_telemetr" />
+                                        <label for="notify_alert_telemetr">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryFixedCheck">
-                                        <label class="form-check-label" for="telemetryFixedCheck" style="margin-right: 7px;">фиксированное</label>
+                                        <input type="radio" id="repeat_none_telemetr" name="repeat_telemetrype_telemetr" value="none_telemetr" />
+                                        <label for="repeat_none_telemetr">Нет</label>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryNoneCheck1">
-                                        <label class="form-check-label" for="telemetryNoneCheck1" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryAlarmCheck">
-                                        <label class="form-check-label" for="telemetryAlarmCheck" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="telemetryNoneCheck2">
-                                        <label class="form-check-label" for="telemetryNoneCheck2">нет</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="5">
+                                <div class="rule-line rule-line-bottom">
+                                    <div class="form-check form-check-inline rule-item" style="margin-left: 377px;">
+                                        <input type="radio" id="notify_alert_telemetr" name="notification_telemetrype_telemetr" value="alert_telemetr" />
+                                        <label for="notify_alert_telemetr">Авария</label>
                                     </div>
                                 </div>
                             </td>
@@ -942,45 +1037,40 @@
                 </div>
                 <!-- Контейнер для правил оборудования -->
                 <div id="equipment-rules" class="rule-container">
-                    <!-- Группа кнопок систем оборудования -->
-                    <div class="btn-group btn-group-sm mb-3" role="group" style="width: 100%; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-outline-secondary equipment-system-btn active">Вентиляция</button>
-                        <button type="button" class="btn btn-outline-secondary equipment-system-btn">Приток</button>
-                        <button type="button" class="btn btn-outline-secondary equipment-system-btn">Обогрев</button>
-                        <button type="button" class="btn btn-outline-secondary equipment-system-btn">Охлаждение</button>
-                        <button type="button" class="btn btn-outline-secondary equipment-system-btn">Увлажнение</button>
-                    </div>
-
                     <table class="rule-table">
                         <tr>
                             <td class="rule-number">1.</td>
                             <td colspan="5">
                                 <div class="rule-line rule-line-top">
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentFailureCheck">
-                                        <label class="form-check-label" for="equipmentFailureCheck">отказ оборудования</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">шт</button>
-                                        </div>
+                                        <label class="form-check-label" for="equipmentFailureCheck">Отказ оборудования</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentDelayCheck">
-                                        <label class="form-check-label" for="equipmentDelayCheck">задержка</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="delay_enabled_oborud" name="delay_oborudype_oborud" value="enabled_oborud" checked />
+                                        <label for="delay_enabled_oborud">Задержка</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                     <span class="rule-then">, то</span>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentNotificationCheck">
-                                        <label class="form-check-label" for="equipmentNotificationCheck">уведомление</label>
+                                        <input type="radio" id="notify_normal_oborud" name="notification_oborudype_oborud" value="notification_oborud" checked />
+                                        <label for="notify_normal_oborud">Уведомление</label>
                                     </div>
                                     <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentRepeatCheck">
-                                        <label class="form-check-label" for="equipmentRepeatCheck">повтор</label>
-                                        <input type="text" class="form-control form-control-sm time-input" style="width: 80px;" placeholder="чч:мм:сс">
+                                        <input type="radio" id="repeat_enabled_oborud" name="repeat_oborudype_oborud" value="enabled_oborud" checked />
+                                        <label for="repeat_enabled_oborud">Повтор</label>
+                                        <input type="text" 
+                                        class="form-control form-control-sm time-input" 
+                                        style="width: 85px;" 
+                                        placeholder="чч:мм:сс"
+                                        pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+                                        title="Введите время в формате чч:мм:сс (00:00:00 - 23:59:59)"
+                                        oninput="formatTimeInput(this)">
                                     </div>
                                 </div>
                             </td>
@@ -989,32 +1079,17 @@
                             <td></td>
                             <td colspan="5">
                                 <div class="rule-line rule-line-bottom">
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentMalfunctionCheck">
-                                        <label class="form-check-label" for="equipmentMalfunctionCheck" style="margin-right: 15px;">неисправность</label>
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="text" 
-                                                class="form-control number-input" 
-                                                pattern="\d{1,2},\d{2}"
-                                                title="Введите число в формате XX,XX">
-                                            <button class="btn btn-outline-secondary unit-btn" type="button">%</button>
-                                        </div>
+                                    <div class="form-check form-check-inline rule-item" style="margin-left: 168px;">
+                                        <input type="radio" id="delay_none_oborud" name="delay_oborudype_oborud" value="none_oborud" />
+                                        <label for="delay_none_oborud">Нет</label>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentFixedCheck">
-                                        <label class="form-check-label" for="equipmentFixedCheck" style="margin-right: 7px;">фиксированное</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-left: 173px;">
+                                        <input type="radio" id="notify_alert_oborud" name="notification_oborudype_oborud" value="alert_oborud" />
+                                        <label for="notify_alert_oborud">Авария</label>
                                     </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentNoneCheck1">
-                                        <label class="form-check-label" for="equipmentNoneCheck1" style="margin-right: 167px;">нет</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentAlarmCheck">
-                                        <label class="form-check-label" for="equipmentAlarmCheck" style="margin-right: 40px;">авария</label>
-                                    </div>
-                                    <div class="form-check form-check-inline rule-item">
-                                        <input class="form-check-input" type="checkbox" id="equipmentNoneCheck2">
-                                        <label class="form-check-label" for="equipmentNoneCheck2">нет</label>
+                                    <div class="form-check form-check-inline rule-item" style="margin-left: 40px;">
+                                        <input type="radio" id="repeat_none_oborud" name="repeat_oborudype_oborud" value="none_oborud" />
+                                        <label for="repeat_none_oborud">Нет</label>
                                     </div>
                                 </div>
                             </td>
@@ -1033,12 +1108,19 @@
     <!-- Bootstrap 5 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Контейнер для правил температуры -->
+
+
+
     <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Получаем все элементы
     const paramButtons = document.querySelectorAll('.param-btn');
     const enableRuleCheckbox = document.getElementById('enable-rule-checkbox');
     const currentValueText = document.getElementById('current-value-text');
+    
+    // Получаем группы кнопок оборудования
+    const sensorButtonsGroup = document.querySelector('.btn-group:nth-of-type(1)');
+    const equipmentButtonsGroup = document.querySelector('.btn-group:nth-of-type(2)');
     
     // Получаем все контейнеры правил
     const rulesContainers = {
@@ -1068,9 +1150,35 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.values(rulesContainers).forEach(container => {
             if (container) container.style.display = 'none';
         });
+        
+        // Скрываем обе группы кнопок
+        sensorButtonsGroup.style.display = 'none';
+        equipmentButtonsGroup.style.display = 'none';
     }
 
-    // Обработчики для кнопок параметров
+    // Функция для показа правил с учетом типа
+    function showRules(ruleType) {
+        return function() {
+            resetAll();
+            this.classList.add('active');
+            enableRuleCheckbox.style.display = 'block';
+            currentValueText.style.display = 'block';
+            
+            // Показываем соответствующий контейнер правил
+            if (rulesContainers[ruleType]) {
+                rulesContainers[ruleType].style.display = 'block';
+            }
+            
+            // Управляем видимостью групп кнопок
+            if (ruleType === 'telemetry') {
+                sensorButtonsGroup.style.display = 'flex';
+            } else if (ruleType === 'equipment') {
+                equipmentButtonsGroup.style.display = 'flex';
+            }
+        };
+    }
+
+    // Назначаем обработчики для кнопок параметров
     document.getElementById('temperature-btn').addEventListener('click', showRules('temperature'));
     document.querySelector('.param-btn:nth-of-type(2)').addEventListener('click', showRules('humidity'));
     document.querySelector('.param-btn:nth-of-type(3)').addEventListener('click', showRules('co2'));
@@ -1083,50 +1191,64 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.param-btn:nth-of-type(10)').addEventListener('click', showRules('telemetry'));
     document.querySelector('.param-btn:nth-of-type(11)').addEventListener('click', showRules('equipment'));
 
-    // Фабрика обработчиков для показа правил
-    function showRules(ruleType) {
-        return function() {
-            resetAll();
-            this.classList.add('active');
-            enableRuleCheckbox.style.display = 'block';
-            currentValueText.style.display = 'block';
-            if (rulesContainers[ruleType]) {
-                rulesContainers[ruleType].style.display = 'block';
-            }
-        };
-    }
-
     // Обработчики для кнопок систем оборудования
-    const equipmentSystemButtons = document.querySelectorAll('.equipment-system-btn');
-    equipmentSystemButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Удаляем активный класс у всех кнопок систем
-            equipmentSystemButtons.forEach(b => b.classList.remove('active'));
-            // Добавляем активный класс текущей кнопке
-            this.classList.add('active');
-            
-            // Здесь можно добавить логику для загрузки/отображения
-            // правил для выбранной системы оборудования
-            console.log('Выбрана система:', this.textContent);
+    function setupEquipmentButtons() {
+        // Для сенсоров (телеметрия)
+        const telemetryButtons = sensorButtonsGroup.querySelectorAll('.equipment-system-btn');
+        telemetryButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                telemetryButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                console.log('Выбрана система телеметрии:', this.textContent);
+            });
         });
-    });
 
-    // Обработчик для кнопки "Добавить"
-    const addButton = document.querySelector('.control-panel .btn-primary');
-    if (addButton) {
-        addButton.addEventListener('click', function() {
-            // Логика для добавления нового правила
-            console.log('Добавление нового правила');
-            
-            // Можно реализовать модальное окно или другую логику
-            // для создания нового правила
+        // Для оборудования
+        const equipmentButtons = equipmentButtonsGroup.querySelectorAll('.equipment-system-btn');
+        equipmentButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                equipmentButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                console.log('Выбрана система оборудования:', this.textContent);
+            });
         });
     }
 
-    // Инициализация - скрываем все правила при загрузке
+    // Инициализация
+    setupEquipmentButtons();
     resetAll();
+    
+    // По умолчанию активируем первую кнопку (если нужно)
+    // document.getElementById('temperature-btn').click();
 });
+</script>
+
+<script>
+function formatTimeInput(input) {
+    // Удаляем все нецифровые символы
+    let value = input.value.replace(/\D/g, '');
+    
+    // Форматируем в чч:мм:сс
+    if (value.length > 6) value = value.substring(0, 6);
+    
+    let formatted = '';
+    for (let i = 0; i < value.length; i++) {
+        if (i === 2 || i === 4) formatted += ':';
+        formatted += value[i];
+    }
+    
+    input.value = formatted;
+    
+    // Проверка корректности при потере фокуса (без alert)
+    input.addEventListener('blur', function() {
+        if (!this.value.match(/^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/)) {
+            this.value = '';
+        }
+    });
+}
     </script>
-    <!-- Контейнер для правил температуры -->
+
 </body>
 </html>
